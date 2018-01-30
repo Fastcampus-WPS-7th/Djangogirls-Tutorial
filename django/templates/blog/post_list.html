@@ -8,9 +8,16 @@
 	<title>DjangoGirls Tutorial</title>
 </head>
 <body>
-	<!--html:5[tab]-->
-	<h1>Post List</h1>
-	<!--lorem30[tab]-->
-	<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda minus nostrum perferendis perspiciatis provident quos ratione sint veniam! Amet assumenda dignissimos dolor impedit ipsum, iste officia quam reprehenderit voluptatem voluptatum.</p>
+	<div>
+		<h1><a href="">Django Girls Blog</a></h1>
+	</div>
+
+	{% for post in posts %}
+	<div>
+		<p>published: {{ post.published_date }}</p>
+		<h2><a href="">{{ post.title }}</a></h2>
+		<p>{{ post.content|linebreaksbr|truncatewords:30 }}</p>
+	</div>
+	{% endfor %}
 </body>
 </html>
