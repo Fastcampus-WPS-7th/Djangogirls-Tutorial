@@ -11,17 +11,18 @@
 	<div class="btn-container">
 		<a href="{% url 'post-edit' pk=post.pk %}"
 		 class="btn btn-primary">수정하기</a>
+		<a href="{% url 'post-delete' pk=post.pk %}"
+		   class="btn btn-danger">삭제하기 (Link)</a>
 		<button id="delete" class="btn btn-danger">삭제하기 (Popup)</button>
-		<!--<a href="{% url 'post-delete' pk=post.pk %}"-->
-		   <!--class="btn btn-danger">삭제하기</a>-->
-
+		<button class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">삭제하기 (Bootstrap Modal)</button>
 		<form action="{% url 'post-delete' pk=post.pk %}"
 		      id="delete-form"
-		      method="post" class="inline" style="display: none;">
+		      method="post" class="inline">
 			{% csrf_token %}
-			<button type="submit" class="btn btn-danger">삭제하기</button>
+			<button type="submit" class="btn btn-danger">묻지않고 삭제하기</button>
 		</form>
 	</div>
+	<!--Popup 삭제 관련 자바스크립트 코드-->
 	<script>
 		document.querySelector('button#delete').onclick = function() {
 			var result = window.confirm('삭제하시겠습니까?');
@@ -31,4 +32,31 @@
 		}
 	</script>
 </div>
+
+<!--Bootstrap modal HTML코드-->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">글 삭제 확인</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>삭제하시겠습니까?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+        <button id="modal-button" type="button" class="btn btn-danger">삭제</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!--Bootstrap Modal의 '삭제'버튼을 눌렀을때 동작 코드 (jQuery)-->
+<script>
+	$('#modal-button').click(function() {
+		$('form#delete-form').submit();
+	});
+</script>
 {% endblock %}
