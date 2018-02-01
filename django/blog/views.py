@@ -20,6 +20,8 @@ def post_list(request):
     # HTTP프로토콜로 텍스트 데이터 응답을 반환
     # return HttpResponse('<html><body><h1>Post list</h1><p>Post목록을 보여줄 예정입니다</p></body></html>')
 
+    # 구글검색: django model order recently created in view
+    # order_by
     posts = Post.objects.all()
     # render()함수에 전달할 dict객체 생성
     context = {
