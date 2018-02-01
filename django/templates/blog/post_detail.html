@@ -11,11 +11,24 @@
 	<div class="btn-container">
 		<a href="{% url 'post-edit' pk=post.pk %}"
 		 class="btn btn-primary">수정하기</a>
+		<button id="delete" class="btn btn-danger">삭제하기 (Popup)</button>
+		<!--<a href="{% url 'post-delete' pk=post.pk %}"-->
+		   <!--class="btn btn-danger">삭제하기</a>-->
+
 		<form action="{% url 'post-delete' pk=post.pk %}"
-		      method="post" class="inline">
+		      id="delete-form"
+		      method="post" class="inline" style="display: none;">
 			{% csrf_token %}
 			<button type="submit" class="btn btn-danger">삭제하기</button>
 		</form>
 	</div>
+	<script>
+		document.querySelector('button#delete').onclick = function() {
+			var result = window.confirm('삭제하시겠습니까?');
+			if(result) {
+				document.querySelector('form#delete-form').submit();
+			}
+		}
+	</script>
 </div>
 {% endblock %}

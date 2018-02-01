@@ -151,13 +151,17 @@ def post_delete(request, pk):
         csrf_token사용!
         action의 위치가 요청을 보낼 URL임
     """
+    post = Post.objects.get(pk=pk)
     if request.method == 'POST':
-        # pk에 해당하는 Post를 삭제
-        post = Post.objects.get(pk=pk)
         # 삭제 요청한 user와 post의 author가 같을때만 해당 post를 삭제
         if request.user == post.author:
+            # pk에 해당하는 Post를 삭제
             post.delete()
             # 이후 post-list라는 URL name을 갖는 view로 redirect
             return redirect('post-list')
         # 요청한 유저가 다르면 다시 글 상세화면으로 돌아옴
         return redirect('post-detail', pk=post.pk)
+    context = {
+        'post': post,
+    }
+    return render(request, 'blog/post_delete.html', context)
