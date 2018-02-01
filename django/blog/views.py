@@ -1,4 +1,3 @@
-from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
 from .models import Post
@@ -45,6 +44,51 @@ def post_detail(request, pk):
         'blog/post_detail.html',
         context
     )
+
+
+def post_edit(request, pk):
+    """
+    1. pk에 해당하는 Post인스턴스를
+        context라는 dict에 'post'키에 할당
+        위에서 생성한 dict는 render의 context에 전달
+        사용하는 템플릿은 'blog/post_add.html'을 재사용
+            HTML새로 만들지 말고 있던 html을 그냥 할당
+    2. url은 /<pk>/edit/ <- 에 매칭되도록 urls.py작성
+    3. 이 위치로 올 수 있는 a요소를 post_detail.html에 작성 (form아님)
+
+    - request.method가 POST일 때는 request.POST에 있는 데이터를 이용해서
+      pk에 해당하는 Post인스턴스의 값을 수정, 이후 post-detail로 redirect
+        값을 수정하는 코드
+            post = Post.objects.get(pk=pk)
+            post.title = <새 문자열>
+            post.content = <새 문자열>
+            post.save()  <- DB에 업데이트 됨
+
+    - request.method가 GET일 때는 현재 아래에 있는 로직을 실행
+
+    :param request:
+    :param pk:
+    :return:
+    """
+    # 현재 URL (pk가 3일경우 /3/edit/)에 전달된 pk에 해당하는 Post인스턴스를 post변수에 할당
+    post = Post.objects.get(pk=pk)
+    # 만약 POST메서드 요청일 경우
+    if request.method == 'POST':
+        # post의 제목/내용을 전송받은 값으로 수정 후
+        title = request.POST['title']
+        content = request.POST['content']
+        post.title = title
+        post.content = content
+        # DB에 저장
+        post.save()
+        # 이후 상세화면으로 이동
+        return redirect('post-detail', pk=post.pk)
+    # GET메서드 요청일 경우
+    context = {
+        'post': post,
+    }
+    # 수정할 수 있는 페이지를 보여줌
+    return render(request, 'blog/post_edit.html', context)
 
 
 def post_add(request):
