@@ -92,8 +92,9 @@ def post_delete(request, pk):
         csrf_token사용!
         action의 위치가 요청을 보낼 URL임
     """
-    # pk에 해당하는 Post를 삭제
-    post = Post.objects.get(pk=pk)
-    post.delete()
-    # 이후 post-list라는 URL name을 갖는 view로 redirect
-    return redirect('post-list')
+    if request.method == 'POST':
+        # pk에 해당하는 Post를 삭제
+        post = Post.objects.get(pk=pk)
+        post.delete()
+        # 이후 post-list라는 URL name을 갖는 view로 redirect
+        return redirect('post-list')
