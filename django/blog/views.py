@@ -95,6 +95,10 @@ def post_delete(request, pk):
     if request.method == 'POST':
         # pk에 해당하는 Post를 삭제
         post = Post.objects.get(pk=pk)
-        post.delete()
-        # 이후 post-list라는 URL name을 갖는 view로 redirect
-        return redirect('post-list')
+        # 삭제 요청한 user와 post의 author가 같을때만 해당 post를 삭제
+        if request.user == post.author:
+            post.delete()
+            # 이후 post-list라는 URL name을 갖는 view로 redirect
+            return redirect('post-list')
+        # 요청한 유저가 다르면 다시 글 상세화면으로 돌아옴
+        return redirect('post-detail', pk=post.pk)
