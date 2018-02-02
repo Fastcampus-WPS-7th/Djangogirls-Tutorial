@@ -1,6 +1,14 @@
 from django.shortcuts import render, redirect
 
-from .models import Post
+from ..models import Post
+
+__all__ = (
+    'post_list',
+    'post_add',
+    'post_delete',
+    'post_detail',
+    'post_edit',
+)
 
 
 def post_list(request):
